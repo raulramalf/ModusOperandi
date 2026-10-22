@@ -9,10 +9,11 @@ export const site = {
   locale: 'es-ES',
   city: 'Ciudad Real',
   region: 'Castilla-La Mancha',
-  phone: null as string | null,
-  email: null as string | null,
-  address: null as { street: string; postalCode: string } | null,
-  licenseNumber: null as string | null,
+  // Datos tomados de la web actual (auditoría 22/10/2026). Pendiente de confirmación por el cliente.
+  phone: '635 38 79 11' as string | null,
+  email: 'detectives@modus-operandi.es' as string | null,
+  address: { street: 'Avenida Descubrimientos, 3', postalCode: '13005' } as { street: string; postalCode: string } | null,
+  licenseNumber: '4296 (Ministerio del Interior); despacho nº 11073 RNSP' as string | null,
   openingHours: null as string | null,
   // Solo servicios confirmados por el cliente / presentes en el sitio actual.
   services: [] as { title: string; href: string; summary: string }[],
