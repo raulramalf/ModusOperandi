@@ -1,0 +1,13 @@
+---
+import { site } from '../config/site';
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/">{site.name}</a>
+    <nav aria-label="Principal">
+      <a href="/blog/">Blog</a>
+      <a href="/#contacto">Contacto</a>
+      {site.phone && <a class="btn" href={`tel:${site.phone.replace(/\s/g, '')}`}>Llamar</a>}
+    </nav>
+  </div>
+</header>

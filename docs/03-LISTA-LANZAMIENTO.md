@@ -1,0 +1,14 @@
+# Lista de comprobación de lanzamiento
+- [ ] Auditoría completada y `audit/redirect-map.json` revisado
+- [ ] URL antiguas conservadas o con 301 (`npm run audit:redirects`)
+- [ ] Canonical, títulos y metadescripciones iguales a los originales
+- [ ] `sitemap.xml` correcto; `robots.txt` sin bloqueos; sin `noindex` accidental
+- [ ] Sin enlaces rotos; 404 correcta
+- [ ] Formularios y teléfonos probados; datos de `site.ts` verificados por el cliente
+- [ ] JSON-LD validado (Rich Results Test / validator.schema.org)
+- [ ] Responsive (móvil/tableta/escritorio) y accesibilidad (teclado, contraste)
+- [ ] Rendimiento: PageSpeed Insights móvil — LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 (datos de campo cuando existan)
+- [ ] Copia WordPress + plan de reversión listos
+- [ ] Search Console (propiedad de dominio) y GA4 configurados
+- [ ] Make probado de extremo a extremo (ver `docs/05-MAKE.md`)
+- [ ] Aviso legal, privacidad y cookies conformes (RGPD/LSSI) si hay analítica o formulario

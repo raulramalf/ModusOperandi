@@ -1,0 +1,10 @@
+node_modules
+dist
+.astro
+.env
+.env.*
+!.env.example
+sanity/node_modules
+sanity/dist
+audit/backup/*
+!audit/backup/.gitkeep

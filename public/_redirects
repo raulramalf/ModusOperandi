@@ -1,0 +1,3 @@
+# Redirecciones 301 (Cloudflare Pages). Generar con la auditoría; formato:
+#   /url-antigua/  /url-nueva/  301
+# No redirigir en masa a la home. Máx. 2.000 estáticas.

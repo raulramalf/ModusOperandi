@@ -1,0 +1,7 @@
+# Escenario editorial en Make
+Plantilla en `make/escenario.md`. Reglas: sin credenciales en el repo ni en campos del CMS (usar Conexiones de Make); sin datos de clientes ni de casos hacia la IA; **ningún artículo se publica sin aprobación humana**.
+
+Flujo: 1 Disparo (programado o formulario/Sheet con tema) → 2 Intención de búsqueda → 3 Consulta GROQ a Sanity (`*[_type=="post"]{title,"slug":slug.current}`) y comparación de similitud para evitar duplicados → 4 Investigación con fuentes fiables (lista blanca: BOE, Ministerio del Interior, INE, etc.) → 5 Esquema y borrador (IA) → 6 Validación (afirmaciones con fuente, enlaces con HTTP 200, calidad) → 7 Título ≤ 60, metadescripción ≤ 160, slug → 8 `POST https://<id>.api.sanity.io/v2025-01-01/data/mutate/<dataset>` con `createIfNotExists` y `_id: "drafts.<id-determinista>"` (idempotente → sin duplicados) → 9 Aviso al editor (email/Slack) con enlace al Studio → 10 El editor revisa y pulsa *Publish* en Studio → 11 El webhook de Sanity dispara el Deploy Hook de Cloudflare → 12 Registro (Data store / hoja) con ID, estado y errores.
+Gestión de errores: reintentos limitados (máx. 3, espera exponencial), ruta de error con alerta al editor, límite de ejecuciones/día.
+Token de escritura de Sanity: rol *Editor* limitado a este proyecto, guardado solo en la conexión de Make y rotado periódicamente.
+Make Core (plan gratuito/Core) cuenta operaciones: estimar ~15–25 por artículo y confirmar límites vigentes.

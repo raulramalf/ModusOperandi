@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+import { getPosts } from '../lib/sanity';
+const posts = (await getPosts()).slice(0, 3);
+---
+<Base
+  title={`Detective privado en ${site.city} | ${site.name}`}
+  description={`Agencia de investigación privada en ${site.city}. Consulta confidencial y discreta.`}
+  path="/"
+>
+  <section class="hero">
+    <div class="wrap">
+      <p class="muted">Investigación privada · {site.city}</p>
+      <h1>Detectives privados en {site.city}</h1>
+      <p class="lead">Investigaciones realizadas con rigor, discreción y dentro del marco legal.</p>
+      {site.phone && <p><a class="btn" href={`tel:${site.phone.replace(/\s/g, '')}`}>Llamar ahora</a></p>}
+    </div>
+  </section>
+
+  {site.services.length > 0 && (
+    <section class="wrap">
+      <h2>Servicios</h2>
+      <div class="grid">
+        {site.services.map((s) => (
+          <article class="card"><h3><a href={s.href}>{s.title}</a></h3><p>{s.summary}</p></article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {posts.length > 0 && (
+    <section class="wrap">
+      <h2>Últimos artículos</h2>
+      <div class="grid">
+        {posts.map((p) => (
+          <article class="card"><h3><a href={p.path}>{p.title}</a></h3>{p.excerpt && <p>{p.excerpt}</p>}</article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="wrap" id="contacto">
+    <h2>Contacto</h2>
+    <p>Todas las consultas son confidenciales.</p>
+    {site.phone && <p>Teléfono: <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></p>}
+    {site.email && <p>Email: <a href={`mailto:${site.email}`}>{site.email}</a></p>}
+  </section>
+</Base>

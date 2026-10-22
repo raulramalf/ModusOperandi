@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+import { localBusiness } from '../lib/schema';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string; description: string; path: string;
+  canonical?: string; noindex?: boolean; ogImage?: string; ogType?: string; jsonLd?: object[];
+}
+const { title, description, path, canonical, noindex = false, ogImage, ogType = 'website', jsonLd = [] } = Astro.props;
+const canonicalUrl = canonical ?? new URL(path, site.url).href;
+const image = new URL(ogImage ?? site.defaultOgImage, site.url).href;
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+  {noindex && <meta name="robots" content="noindex,follow" />}
+  <meta property="og:type" content={ogType} />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={image} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap.xml" />
+  {[localBusiness(), ...jsonLd].map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+  <Header />
+  <main id="main"><slot /></main>
+  <Footer />
+</body>
+</html>

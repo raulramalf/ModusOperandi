@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getPages, getPosts, renderBody, imgUrl, type Entry } from '../lib/sanity';
+import { site } from '../config/site';
+import { breadcrumbs, article } from '../lib/schema';
+
+export async function getStaticPaths() {
+  const [pages, posts] = await Promise.all([getPages(), getPosts()]);
+  const all: (Entry & { kind: 'page' | 'post' })[] = [
+    ...pages.map((e) => ({ ...e, kind: 'page' as const })),
+    ...posts.map((e) => ({ ...e, path: e.path ?? `/blog/${e.slug}/`, kind: 'post' as const })),
+  ];
+  const seen = new Set<string>();
+  return all.map((e) => {
+    if (seen.has(e.path)) throw new Error(`Ruta duplicada en el CMS: ${e.path}`);
+    seen.add(e.path);
+    // Astro necesita el parámetro sin barras inicial/final; ruta histórica se conserva exacta.
+    return { params: { slug: e.path.replace(/^\/|\/$/g, '') }, props: { entry: e } };
+  });
+}
+const { entry } = Astro.props;
+const url = new URL(entry.path, site.url).href;
+const title = entry.seo?.title ?? `${entry.title} | ${site.name}`;
+const description = entry.seo?.description ?? entry.excerpt ?? entry.title;
+const crumbs = [{ name: 'Inicio', href: '/' }, ...(entry.kind === 'post' ? [{ name: 'Blog', href: '/blog/' }] : []), { name: entry.title }];
+const ld: object[] = [breadcrumbs(crumbs.map((c) => ({ name: c.name, url: new URL(c.href ?? entry.path, site.url).href })))];
+if (entry.kind === 'post') ld.push(article({ title: entry.title, url, published: entry.publishedAt, updated: entry.updatedAt, description }));
+const hero = entry.mainImage ? imgUrl(entry.mainImage) : undefined;
+---
+<Base title={title} description={description} path={entry.path} canonical={entry.seo?.canonical}
+  noindex={entry.seo?.noindex} ogImage={hero} ogType={entry.kind === 'post' ? 'article' : 'website'} jsonLd={ld}>
+  <div class="wrap">
+    <Breadcrumbs items={crumbs} />
+    <article class="prose">
+      <h1>{entry.title}</h1>
+      {entry.publishedAt && <p class="muted"><time datetime={entry.publishedAt}>{new Date(entry.publishedAt).toLocaleDateString('es-ES')}</time></p>}
+      {hero && <img src={hero} alt={entry.mainImage?.alt ?? ''} width="1200" height="630" fetchpriority="high" />}
+      <div set:html={renderBody(entry.body)} />
+    </article>
+  </div>
+</Base>

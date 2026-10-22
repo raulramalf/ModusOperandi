@@ -1,0 +1,11 @@
+---
+import { site } from '../config/site';
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>{site.name}</strong> · {site.city}</p>
+    {site.licenseNumber && <p>Despacho habilitado, nº {site.licenseNumber}</p>}
+    {site.email && <p><a href={`mailto:${site.email}`}>{site.email}</a></p>}
+    <p class="muted">Confidencialidad y discreción en todas las investigaciones.</p>
+  </div>
+</footer>
