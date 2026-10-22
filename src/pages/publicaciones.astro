@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { imageFor } from '../lib/images';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getPosts } from '../lib/sanity';
@@ -6,11 +8,10 @@ import { site } from '../config/site';
 const posts = await getPosts();
 ---
 <Base title={`Publicaciones | ${site.name}`} description={`Artículos sobre investigación privada en ${site.city}.`} path="/publicaciones/">
-  <div class="wrap">
-    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Publicaciones' }]} />
-    <h1>Publicaciones</h1>
+  <section class="page-hero"><div class="wrap"><Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Publicaciones' }]} /><h1>Publicaciones</h1></div></section>
+  <div class="wrap" style="padding-top:2.5rem;padding-bottom:3rem">
     <div class="grid">
-      {posts.map((p) => <article class="card"><h2><a href={p.path ?? `/${p.slug}/`}>{p.title}</a></h2>{p.excerpt && <p>{p.excerpt}</p>}</article>)}
+      {posts.map((p) => <article class="card">{imageFor(p.path) && <Image src={imageFor(p.path)!.src} alt={imageFor(p.path)!.alt} widths={[400, 700]} sizes="(min-width:900px) 24rem, 100vw" />}<div class="body"><h2><a href={p.path}>{p.title}</a></h2><p>{p.excerpt}</p></div></article>)}
     </div>
     {posts.length === 0 && <p class="muted">Próximamente.</p>}
   </div>

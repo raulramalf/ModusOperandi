@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { imageFor } from '../../../lib/images';
 import Base from '../../../layouts/Base.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import { getCategories, getPosts } from '../../../lib/sanity';
@@ -10,9 +12,8 @@ export async function getStaticPaths() {
 const { cat, posts } = Astro.props;
 ---
 <Base title={`${cat.title} archivos - ${site.name}`} description={`Artículos de ${cat.title} de ${site.name}.`} path={`/category/${cat.slug}/`}>
-  <div class="wrap">
-    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: cat.title }]} />
-    <h1>{cat.title}</h1>
-    <div class="grid">{posts.map((p) => <article class="card"><h2><a href={p.path}>{p.title}</a></h2><p>{p.excerpt}</p></article>)}</div>
+  <section class="page-hero"><div class="wrap"><Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: cat.title }]} /><h1>{cat.title}</h1></div></section>
+  <div class="wrap" style="padding-top:2.5rem;padding-bottom:3rem">
+    <div class="grid">{posts.map((p) => <article class="card">{imageFor(p.path) && <Image src={imageFor(p.path)!.src} alt={imageFor(p.path)!.alt} widths={[400, 700]} sizes="(min-width:900px) 24rem, 100vw" />}<div class="body"><h2><a href={p.path}>{p.title}</a></h2><p>{p.excerpt}</p></div></article>)}</div>
   </div>
 </Base>

@@ -3,9 +3,11 @@ import { site } from '../config/site';
 ---
 <footer class="site-footer">
   <div class="wrap">
-    <p><strong>{site.name}</strong> · {site.city}</p>
-    {site.licenseNumber && <p>Despacho habilitado, nº {site.licenseNumber}</p>}
-    {site.email && <p><a href={`mailto:${site.email}`}>{site.email}</a></p>}
-    <p class="muted">Confidencialidad y discreción en todas las investigaciones.</p>
+    <p><strong>{site.name}</strong></p>
+    {site.address && <p>{site.address.street}, {site.address.postalCode} {site.city}</p>}
+    {site.phone && <p>Tel. <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>{site.email && <> · <a href={`mailto:${site.email}`}>{site.email}</a></>}</p>}
+    {site.licenseNumber && <p>Licencia {site.licenseNumber}</p>}
+    <p><a href="/politica-de-privacidad/">Privacidad</a> · <a href="/politica-de-cookies/">Cookies</a></p>
+    <p>© {new Date().getFullYear()} {site.name}. Confidencialidad y discreción en todas las investigaciones.</p>
   </div>
 </footer>

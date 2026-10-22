@@ -1,55 +1,96 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { site } from '../config/site';
 import { getPosts } from '../lib/sanity';
+import { asset, imageFor } from '../lib/images';
 const posts = (await getPosts()).slice(0, 3);
+const tel = site.phone?.replace(/\s/g, '');
 ---
 <Base
-  title={`Detective privado en ${site.city} | ${site.name}`}
+  title="Detectives Privados en Ciudad Real | Modus Operandi"
   description={`Agencia de investigación privada en ${site.city}. Consulta confidencial y discreta.`}
   path="/"
 >
   <section class="hero">
+    <Image class="hero-img" src={asset('espiando.jpg')} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" fetchpriority="high" />
     <div class="wrap">
-      <p class="muted">Investigación privada · {site.city}</p>
+      <p class="eyebrow">Investigación privada · {site.city}</p>
       <h1>Detectives privados en {site.city}</h1>
-      <p class="lead">Investigaciones realizadas con rigor, discreción y dentro del marco legal.</p>
-      {site.phone && <p><a class="btn" href={`tel:${site.phone.replace(/\s/g, '')}`}>Llamar ahora</a></p>}
+      <p class="lead">Investigaciones con rigor, discreción y dentro del marco legal. Al finalizar, un informe escrito detallado con las pruebas obtenidas.</p>
+      <div class="actions">
+        {tel && <a class="btn" href={`tel:${tel}`}>Llamar: {site.phone}</a>}
+        <a class="btn ghost" href="#contacto">Consulta confidencial</a>
+      </div>
     </div>
   </section>
 
-  {site.services.length > 0 && (
-    <section class="wrap">
-      <h2>Servicios</h2>
-      <div class="grid">
-        {site.services.map((s) => (
-          <article class="card"><h3><a href={s.href}>{s.title}</a></h3><p>{s.summary}</p></article>
-        ))}
-      </div>
-    </section>
-  )}
+  <div class="trust">
+    <ul class="wrap">
+      <li><strong>Licencia {site.licenseNumber?.split(' ')[0]}</strong>Habilitados por el Ministerio del Interior</li>
+      <li><strong>Despacho nº 11073 RNSP</strong>Registrado en el Registro Nacional</li>
+      <li><strong>{site.serviceArea.length} provincias</strong>{site.serviceArea.join(' · ')}</li>
+      <li><strong>Confidencial</strong>Presupuesto ajustado desde el inicio</li>
+    </ul>
+  </div>
 
-  {posts.length > 0 && (
-    <section class="wrap">
-      <h2>Últimos artículos</h2>
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Servicios</p><h2>Cómo podemos ayudarte</h2></div>
       <div class="grid">
-        {posts.map((p) => (
-          <article class="card"><h3><a href={p.path}>{p.title}</a></h3>{p.excerpt && <p>{p.excerpt}</p>}</article>
-        ))}
+        {site.services.map((s) => {
+          const img = imageFor(s.href);
+          return (
+            <article class="card">
+              {img && <Image src={img.src} alt={img.alt} widths={[400, 700]} sizes="(min-width:900px) 24rem, 100vw" />}
+              <div class="body"><h3><a href={s.href}>{s.title}</a></h3><p>{s.summary}</p><a class="more" href={s.href}>Saber más →</a></div>
+            </article>
+          );
+        })}
       </div>
-    </section>
-  )}
-
-  <section class="wrap">
-    <h2>Despacho habilitado</h2>
-    <p>Agencia de detectives privados en {site.city}{site.licenseNumber && <>, licencia {site.licenseNumber}</>}. Servicio en {site.serviceArea.join(', ')}.</p>
+    </div>
   </section>
 
-  <section class="wrap" id="contacto">
-    <h2>Contacto</h2>
-    <p>Todas las consultas son confidenciales.</p>
-    {site.phone && <p>Teléfono: <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></p>}
-    {site.address && <p>Dirección: {site.address.street}, {site.address.postalCode} {site.city}</p>}
-    {site.email && <p>Email: <a href={`mailto:${site.email}`}>{site.email}</a></p>}
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Método de trabajo</p><h2>Así llevamos cada caso</h2></div>
+      <div class="steps">
+        <div class="step"><h3>Presupuesto ajustado</h3><p>Elaboramos un presupuesto acorde a tus necesidades, para que conozcas en todo momento el coste exacto de la investigación.</p></div>
+        <div class="step"><h3>Contacto directo</h3><p>Mantenemos comunicación directa y permanente para que estés informado del estado y alcance de las investigaciones en marcha.</p></div>
+        <div class="step"><h3>Informe detallado</h3><p>Al finalizar entregamos un informe escrito con las pruebas fotográficas, sonoras o videográficas obtenidas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="block">
+      <div class="wrap">
+        <div class="sec-head"><p class="eyebrow">Publicaciones</p><h2>Últimos artículos</h2></div>
+        <div class="grid">
+          {posts.map((p) => {
+            const img = imageFor(p.path);
+            return (
+              <article class="card">
+                {img && <Image src={img.src} alt={img.alt} widths={[400, 700]} sizes="(min-width:900px) 24rem, 100vw" />}
+                <div class="body"><h3><a href={p.path}>{p.title}</a></h3>{p.excerpt && <p>{p.excerpt}</p>}</div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="cta" id="contacto">
+    <div class="wrap">
+      <h2>Habla con nosotros, con total confidencialidad</h2>
+      <p>Servicio en {site.serviceArea.join(', ')}.</p>
+      <ul class="contact-list">
+        {site.phone && <li>Teléfono: <a href={`tel:${tel}`}>{site.phone}</a></li>}
+        {site.email && <li>Email: <a href={`mailto:${site.email}`}>{site.email}</a></li>}
+        {site.address && <li>{site.address.street}, {site.address.postalCode} {site.city}</li>}
+      </ul>
+      {tel && <a class="btn" href={`tel:${tel}`}>Llamar ahora</a>}
+    </div>
   </section>
 </Base>

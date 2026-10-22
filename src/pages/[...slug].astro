@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { imageFor } from '../lib/images';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getPages, getPosts, renderBody, imgUrl, type Entry } from '../lib/sanity';
@@ -26,17 +28,21 @@ const description = entry.seo?.description ?? entry.excerpt ?? entry.title;
 const crumbs = [{ name: 'Inicio', href: '/' }, ...(entry.kind === 'post' ? [{ name: 'Publicaciones', href: '/publicaciones/' }] : []), { name: entry.title }];
 const ld: object[] = [breadcrumbs(crumbs.map((c) => ({ name: c.name, url: new URL(c.href ?? entry.path, site.url).href })))];
 if (entry.kind === 'post') ld.push(article({ title: entry.title, url, published: entry.publishedAt, updated: entry.updatedAt, description }));
-const hero = entry.mainImage ? imgUrl(entry.mainImage) : undefined;
+const local = imageFor(entry.path);
+const sanityHero = entry.mainImage ? imgUrl(entry.mainImage) : undefined;
 ---
 <Base title={title} description={description} path={entry.path} canonical={entry.seo?.canonical}
-  noindex={entry.seo?.noindex} ogImage={hero} ogType={entry.kind === 'post' ? 'article' : 'website'} jsonLd={ld}>
-  <div class="wrap">
-    <Breadcrumbs items={crumbs} />
-    <article class="prose">
+  noindex={entry.seo?.noindex} ogImage={sanityHero ?? local?.src.src} ogType={entry.kind === 'post' ? 'article' : 'website'} jsonLd={ld}>
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
       <h1>{entry.title}</h1>
-      {entry.publishedAt && <p class="muted"><time datetime={entry.publishedAt}>{new Date(entry.publishedAt).toLocaleDateString('es-ES')}</time></p>}
-      {hero && <img src={hero} alt={entry.mainImage?.alt ?? ''} width="1200" height="630" fetchpriority="high" />}
-      <div set:html={entry.html ?? renderBody(entry.body)} />
-    </article>
+      {entry.publishedAt && <p class="muted"><time datetime={entry.publishedAt}>{new Date(entry.publishedAt).toLocaleDateString('es-ES', { dateStyle: 'long' })}</time></p>}
+    </div>
+  </section>
+  <div class="wrap">
+    {local && <Image class="featured" src={local.src} alt={local.alt} widths={[700, 1200]} sizes="(min-width:1200px) 74rem, 100vw" loading="eager" />}
+    {sanityHero && !local && <img class="featured" src={sanityHero} alt={entry.mainImage?.alt ?? ''} width="1200" height="600" fetchpriority="high" />}
+    <article class="prose"><div set:html={entry.html ?? renderBody(entry.body)} /></article>
   </div>
 </Base>

@@ -1,10 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import { site } from '../config/site';
+import { asset } from '../lib/images';
 ---
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="/">{site.name}</a>
+    <a class="brand" href="/" aria-label={`${site.name} - Inicio`}>
+      <Image src={asset('modus-operandi.jpg')} alt={site.name} height={84} loading="eager" />
+    </a>
     <nav aria-label="Principal">
+      <a href="/modus-operandi/">Quiénes somos</a>
       <a href="/publicaciones/">Publicaciones</a>
       <a href="/#contacto">Contacto</a>
       {site.phone && <a class="btn" href={`tel:${site.phone.replace(/\s/g, '')}`}>Llamar</a>}
