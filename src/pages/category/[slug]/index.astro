@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { getCategories, getPosts } from '../../../lib/sanity';
+import { site } from '../../../config/site';
+export async function getStaticPaths() {
+  const [cats, posts] = await Promise.all([getCategories(), getPosts()]);
+  return cats.map((c) => ({ params: { slug: c.slug }, props: { cat: c, posts: posts.filter((p) => p.category?.slug === c.slug) } }));
+}
+const { cat, posts } = Astro.props;
+---
+<Base title={`${cat.title} archivos - ${site.name}`} description={`Artículos de ${cat.title} de ${site.name}.`} path={`/category/${cat.slug}/`}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: cat.title }]} />
+    <h1>{cat.title}</h1>
+    <div class="grid">{posts.map((p) => <article class="card"><h2><a href={p.path}>{p.title}</a></h2><p>{p.excerpt}</p></article>)}</div>
+  </div>
+</Base>

@@ -40,10 +40,16 @@ const posts = (await getPosts()).slice(0, 3);
     </section>
   )}
 
+  <section class="wrap">
+    <h2>Despacho habilitado</h2>
+    <p>Agencia de detectives privados en {site.city}{site.licenseNumber && <>, licencia {site.licenseNumber}</>}. Servicio en {site.serviceArea.join(', ')}.</p>
+  </section>
+
   <section class="wrap" id="contacto">
     <h2>Contacto</h2>
     <p>Todas las consultas son confidenciales.</p>
     {site.phone && <p>Teléfono: <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></p>}
+    {site.address && <p>Dirección: {site.address.street}, {site.address.postalCode} {site.city}</p>}
     {site.email && <p>Email: <a href={`mailto:${site.email}`}>{site.email}</a></p>}
   </section>
 </Base>

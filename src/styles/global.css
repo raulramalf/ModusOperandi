@@ -8,7 +8,7 @@ a{color:var(--accent)}a:focus-visible,.btn:focus-visible{outline:3px solid var(-
 .site-header{background:var(--bg2);border-bottom:1px solid #263544}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.25rem;flex-wrap:wrap}
 .brand{font-weight:700;color:var(--fg);text-decoration:none;letter-spacing:.02em}
-nav a{margin-left:1.25rem;color:var(--fg);text-decoration:none}
+.bar nav a{margin-left:1.25rem;color:var(--fg);text-decoration:none}
 .btn{display:inline-block;background:var(--accent);color:var(--accent-ink)!important;padding:.65rem 1.1rem;border-radius:.4rem;font-weight:600;text-decoration:none}
 .hero{padding:4.5rem 0 3.5rem;background:linear-gradient(180deg,var(--bg2),var(--bg))}
 h1{font-size:clamp(1.9rem,4vw,3rem);line-height:1.15;margin:.2em 0 .5em}

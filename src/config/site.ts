@@ -16,7 +16,13 @@ export const site = {
   licenseNumber: '4296 (Ministerio del Interior); despacho nº 11073 RNSP' as string | null,
   openingHours: null as string | null,
   // Solo servicios confirmados por el cliente / presentes en el sitio actual.
-  services: [] as { title: string; href: string; summary: string }[],
+  // Enlaces a páginas existentes de la web actual (resúmenes pendientes de revisión del cliente).
+  services: [
+    { title: 'Infidelidades', href: '/infedilidades/', summary: 'Investigación de infidelidades en la pareja.' },
+    { title: 'Control de personal', href: '/emilafs-2/', summary: 'Control de personal y de colaboradores en empresas e instituciones.' },
+    { title: 'Quiénes somos', href: '/modus-operandi/', summary: 'Cómo trabajamos: planificación, análisis e informe final detallado.' },
+  ] as { title: string; href: string; summary: string }[],
+  serviceArea: ['Ciudad Real', 'Madrid', 'Toledo', 'Albacete'],
   social: [] as string[],
   defaultOgImage: '/og-default.jpg',
 };
